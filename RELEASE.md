@@ -31,7 +31,7 @@ During release preparation, create or update a root `VERSION` file as the releas
 - Confirm an open-source license and distribution destinations before a first public release; neither has been chosen yet. Check public artifacts and notes for private application data.
 - Keep one core version for the initial combined release. Split component versions only when an independent release lifecycle becomes a confirmed requirement.
 
-Core currently contains three pre-1.0 Python packages: the ping-only MCP server, the Orchestra CDK project, and the customer-account Lambda worker. `make release-build VERSION=vX.Y.Z` can synthesize the CloudFormation template, package the worker, and generate checksums. These are buildable release candidates, not evidence of customer capability, publication, deployment, or release readiness; the worker still returns unsupported-capability results for every valid command.
+Core currently contains two pre-1.0 Python packages: the ping-only MCP server and the customer-account Foundation CDK project. `make release-build VERSION=vX.Y.Z` synthesizes `bootstrap.yaml` and generates its checksum. This is a buildable release candidate, not evidence of customer capability, publication, deployment, or release readiness; Build, ECS Deploy, SQL, and cache templates do not exist yet.
 
 ## Publish and verify
 

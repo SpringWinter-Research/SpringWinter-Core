@@ -1,6 +1,0 @@
-Metadata-Version: 2.4
-Name: springwinter-orchestrator
-Version: 0.1.0
-Summary: Customer-account Orchestra Lambda handlers and contracts
-Requires-Python: >=3.12
-Requires-Dist: boto3<2,>=1.35

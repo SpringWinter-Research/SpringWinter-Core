@@ -1,7 +1,0 @@
-Metadata-Version: 2.4
-Name: springwinter-infrastructure
-Version: 0.1.0
-Summary: CDK source for the Spring Winter customer bootstrap stack
-Requires-Python: >=3.12
-Requires-Dist: aws-cdk-lib<3,>=2.200
-Requires-Dist: constructs<11,>=10.0

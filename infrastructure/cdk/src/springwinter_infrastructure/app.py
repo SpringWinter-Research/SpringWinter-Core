@@ -1,8 +1,8 @@
 import aws_cdk as cdk
 
-from .stack import OrchestraFoundationStack
+from .stack import FoundationStack
 
 app = cdk.App()
-OrchestraFoundationStack(app, "OrchestraFoundation")
+FoundationStack(app, "SpringWinterFoundation")
 app.synth()
 

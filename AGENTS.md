@@ -13,11 +13,13 @@ The sibling `springwinter-app` repository is private and owns application busine
 
 ## Current stage
 
-The user supplied the initial primer on 2026-09-09. MCP and Orchestra foundations are now implemented, but customer business capabilities, the daemon, the CLI, and the open-source license remain unresolved. Open-source intent does not establish a particular license.
+The user supplied the initial primer on 2026-09-09. MCP and customer-account Foundation infrastructure are implemented, but customer business capabilities, the daemon, the CLI, and the open-source license remain unresolved. Open-source intent does not establish a particular license.
 
 The MCP bootstrap is confirmed as Python managed by `uv` (2026-09-10). It lives in `mcp/`, uses the official MCP Python SDK, and supports stdio plus Streamable HTTP. It currently exposes only `ping`; customer tools and authentication remain undefined. Keep the MCP independently usable and do not import private application logic.
 
-The Orchestra foundation is confirmed as public core infrastructure (2026-09-10). CDK source lives in `infrastructure/cdk/` and customer-account Python Lambda handlers and contracts live in `orchestrator/`; both use `uv`. The install script and generated CloudFormation release artifacts are customer-facing. The foundation targets one AWS account and Region and currently provisions only IAM, SQS, DynamoDB, one Lambda, and CloudWatch; Step Functions and workload provisioning are deferred. Resources use the configurable `sw-orchestra` name prefix, common tags, and retain policies on deletion/replacement.
+The Foundation is public core infrastructure for one customer-owned AWS account and Region. CDK source lives in `infrastructure/cdk/`; contributors use Python 3.12/`uv` plus the repository-pinned CDK CLI. The private Rails control plane uses Active Job backed by Solid Queue for orchestration and assumes an externally protected customer role for AWS operations. Customer DynamoDB is authoritative for operation and resource lifecycle state.
+
+The Foundation currently provisions two retained DynamoDB tables, the cross-account control role, and separate Build, Deploy, and Data CloudFormation execution roles. It provisions no Step Functions, queues, Lambdas, logs, alarms, or workload resources. Capability execution roles intentionally have no workload permissions until their contracts and templates are approved. Resources use the configurable `sw-foundation` prefix and common tags.
 
 ## Agent guidance
 
@@ -26,7 +28,7 @@ The Orchestra foundation is confirmed as public core infrastructure (2026-09-10)
 - Preserve customer usability and the public/private repository boundary when evaluating future changes.
 - Record component development commands and verification workflows when implementations exist. Repository workflow commands are documented below.
 - For MCP work, read `mcp/README.md` first. Design each customer capability before coding: use case, contract, authorization, side effects, idempotency, limits, errors, and acceptance tests. Keep `mcp/uv.lock` current with `uv lock`; use `uv sync --locked` and the Makefile's `mcp-*` commands for repeatable workflows.
-- For Orchestra work, read `infrastructure/cdk/README.md` and `orchestrator/README.md`. Keep customer install artifacts versioned and checksummed, preserve stateful-resource retention, and do not add workload lifecycle behavior until its capability contract is approved. Keep both Python projects locked with `uv` before release.
+- For Foundation work, read `infrastructure/cdk/README.md`. Keep customer install artifacts versioned and checksummed, preserve stateful-resource retention, and do not add Build, ECS Deploy, SQL, or cache behavior until its capability contract is approved. Keep the Python project and local CDK CLI locked before release.
 
 ## Commits and releases
 

@@ -8,12 +8,12 @@ mkdir -p "$output_dir"
 
 cd "$root_dir/infrastructure/cdk"
 uv sync --locked
-uv run cdk synth --path-metadata false --version-reporting false \
+npm ci
+npm exec -- cdk synth --path-metadata false --version-reporting false \
   --output "$output_dir/cdk.out"
-cp "$output_dir/cdk.out/OrchestraFoundation.template.json" "$output_dir/bootstrap.yaml"
-bash "$root_dir/scripts/package-worker.sh" "$output_dir"
+cp "$output_dir/cdk.out/SpringWinterFoundation.template.json" "$output_dir/bootstrap.yaml"
 (
   cd "$output_dir"
-  shasum -a 256 bootstrap.yaml orchestra-worker.zip > SHA256SUMS
+  shasum -a 256 bootstrap.yaml > SHA256SUMS
 )
 echo "$output_dir"
