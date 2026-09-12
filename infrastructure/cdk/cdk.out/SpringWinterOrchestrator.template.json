@@ -1,0 +1,56 @@
+{
+ "Resources": {
+  "OrchestratorRole4C17C129": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "Spring Winter control-plane role. Assumes customer integration roles to act on their behalf.",
+    "RoleName": "spring-winter-orchestrator"
+   }
+  },
+  "OrchestratorRoleDefaultPolicy95E3A3CA": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Resource": "arn:aws:iam::*:role/SpringWinter-Integration-Role",
+       "Sid": "AssumeCustomerIntegrationRoles"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "OrchestratorRoleDefaultPolicy95E3A3CA",
+    "Roles": [
+     {
+      "Ref": "OrchestratorRole4C17C129"
+     }
+    ]
+   }
+  }
+ },
+ "Outputs": {
+  "OrchestratorRoleArn": {
+   "Description": "Use this ARN as OrchestratorRoleArn in customer launch URLs.",
+   "Value": {
+    "Fn::GetAtt": [
+     "OrchestratorRole4C17C129",
+     "Arn"
+    ]
+   }
+  }
+ }
+}

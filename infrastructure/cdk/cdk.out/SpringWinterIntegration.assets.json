@@ -1,0 +1,20 @@
+{
+  "version": "54.0.0",
+  "files": {
+    "08825ac8f5726b2d6a692cfaf1ca3add24b2c440cdda1d406077735750f4ab81": {
+      "displayName": "SpringWinterIntegration Template",
+      "source": {
+        "path": "SpringWinterIntegration.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "current_account-current_region-82da2d07": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "08825ac8f5726b2d6a692cfaf1ca3add24b2c440cdda1d406077735750f4ab81.json",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
