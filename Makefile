@@ -3,7 +3,7 @@
 MCP_HOST ?= 127.0.0.1
 MCP_PORT ?= 8000
 
-.PHONY: help hooks commit-check release-help sync test lint check install-check mcp-sync mcp-test mcp-lint mcp-run mcp-http cdk-sync cdk-synth cdk-test cdk-lint cdk-check release-build
+.PHONY: help hooks commit-check release-help sync test lint check mcp-sync mcp-test mcp-lint mcp-run mcp-http
 
 help:
 	@printf '%s\n' \
@@ -13,17 +13,14 @@ help:
 	  '  make commit-check  Validate history; pass RANGE=BASE..HEAD' \
 	  '  make release-help  Read the release and rollback process' \
 	  '  make sync          Sync all Python dependencies with uv' \
-	  '  make test          Run all unit and infrastructure tests' \
-	  '  make lint          Lint all Python projects' \
-	  '  make check         Run lint, tests, synthesis, and installer checks' \
-	  '  make install-check Validate installer shell syntax' \
+	  '  make test          Run all tests' \
+	  '  make lint          Lint all Python code' \
+	  '  make check         Run lint and tests' \
 	  '  make mcp-sync      Sync MCP dependencies with uv' \
 	  '  make mcp-test      Run MCP tests' \
 	  '  make mcp-lint      Lint MCP Python code' \
 	  '  make mcp-run       Run MCP over stdio' \
 	  '  make mcp-http      Run MCP over Streamable HTTP' \
-	  '  make cdk-check         Run CDK tests, lint, and synthesis' \
-	  '  make release-build VERSION=vX.Y.Z  Build release artifacts' \
 	  '  make help          Show this menu' \
 	  '' \
 	  'Use make <target> to run a workflow.'
@@ -38,47 +35,25 @@ commit-check:
 release-help:
 	@cat RELEASE.md
 
-sync: mcp-sync cdk-sync
+sync: mcp-sync
 
-test: mcp-test cdk-test
+test: mcp-test
 
-lint: mcp-lint cdk-lint
+lint: mcp-lint
 
-check: lint test cdk-synth install-check
-
-install-check:
-	bash -n install.sh scripts/build-release.sh
+check: lint test
 
 mcp-sync:
-	uv sync --project mcp
+	uv sync --locked --project mcp
 
 mcp-test:
-	cd mcp && uv run pytest
+	cd mcp && uv run --locked pytest
 
 mcp-lint:
-	uv run --project mcp ruff check mcp
+	uv run --locked --project mcp ruff check mcp
 
 mcp-run:
-	uv run --project mcp springwinter-mcp
+	uv run --locked --project mcp springwinter-mcp
 
 mcp-http:
-	uv run --project mcp springwinter-mcp --transport streamable-http --host "$(MCP_HOST)" --port "$(MCP_PORT)"
-
-cdk-sync:
-	uv sync --project infrastructure/cdk
-	cd infrastructure/cdk && npm ci
-
-cdk-synth:
-	cd infrastructure/cdk && npm exec -- cdk synth
-
-cdk-test:
-	cd infrastructure/cdk && uv run pytest
-
-cdk-lint:
-	uv run --project infrastructure/cdk ruff check infrastructure/cdk
-
-cdk-check: cdk-test cdk-lint cdk-synth
-
-release-build:
-	@test -n "$(VERSION)" || { printf '%s\n' 'Usage: make release-build VERSION=vX.Y.Z' >&2; exit 2; }
-	bash scripts/build-release.sh "$(VERSION)"
+	uv run --locked --project mcp springwinter-mcp --transport streamable-http --host "$(MCP_HOST)" --port "$(MCP_PORT)"

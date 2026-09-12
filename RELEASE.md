@@ -24,14 +24,15 @@ During release preparation, create or update a root `VERSION` file as the releas
 
 ## Core checks
 
-- Identify which CloudFormation resources, daemon, MCP server, or CLI actually exist and are changed. Establish and run their build/test commands; do not invent commands or mark unimplemented components as tested.
-- Validate changed CloudFormation templates and preview a change set in an authorized disposable environment. Review resource replacement/deletion, IAM changes, and parameters before applying anything.
+- Identify which daemon, MCP server, or CLI components actually exist and are changed. Establish and run their build/test commands; do not invent commands or mark unimplemented components as tested.
 - For daemon/MCP/CLI changes, verify the supported interfaces and customer installation/upgrade path. Describe incompatible protocol, command, configuration, or infrastructure changes.
-- Build the actual distributable artifacts from the candidate, record checksums/digests, and exercise the documented installation path independently from the private application.
+- Build any actual distributable artifacts from the candidate, record immutable identifiers, and exercise the documented installation path independently from the private application.
 - Confirm an open-source license and distribution destinations before a first public release; neither has been chosen yet. Check public artifacts and notes for private application data.
 - Keep one core version for the initial combined release. Split component versions only when an independent release lifecycle becomes a confirmed requirement.
 
-Core currently contains two pre-1.0 Python packages: the ping-only MCP server and the customer-account Foundation CDK project. `make release-build VERSION=vX.Y.Z` synthesizes `bootstrap.yaml` and generates its checksum. This is a buildable release candidate, not evidence of customer capability, publication, deployment, or release readiness; Build, ECS Deploy, SQL, and cache templates do not exist yet.
+Core currently contains one Python package: the ping-only MCP server. It ships no customer-account infrastructure or release-artifact builder. The customer-created AWS role trust contract is documentation, not a provisioned resource or deployable artifact.
+
+Removing the unreleased Foundation implementation does not delete any previously deployed customer stack, retained DynamoDB table, artifact bucket, or IAM role. Customers must inspect and remove those resources explicitly; a source release or rollback must never run that cleanup for them.
 
 ## Publish and verify
 

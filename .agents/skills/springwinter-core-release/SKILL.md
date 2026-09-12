@@ -15,7 +15,7 @@ Resolve these paths relative to this skill directory. Work in this repository, n
 - Establish whether the user wants preparation, publication, deployment, or a hotfix from their request and prior authorization. Proceed with already authorized work; ask only for missing information or authorization required for the next external action.
 - Review full commit bodies for breaking-change footers as well as subjects and code changes. Use the repository's `bin/commit-check` rather than implementing another linter. Record any unlinted history.
 - Select the product version under RELEASE.md and prepare VERSION/changelog edits when requested to prepare a release. No version is assigned by installing this skill.
-- Run this repository's release gates against the candidate. Derive component checks from implemented resources and tools. A docs-only core cannot produce a daemon, MCP server, CLI, or CloudFormation artifact.
+- Run this repository's release gates against the candidate. Derive component checks from implemented resources and tools; do not claim artifacts for components that are not implemented.
 - Summarize the candidate SHA, version, evidence, missing gates, destination, immutable artifact identity, and rollback target. Report unavailable verification plainly.
 - Before any authorized mutation, recheck that the candidate is unchanged. Never tag a dirty or different commit from the one verified, move a published tag, or mix sibling repository release histories.
 - If publication partially succeeds, inspect remote state and resume only missing authorized steps. Preserve verified artifacts and prior release identifiers.

@@ -7,21 +7,21 @@ This package uses the official Python MCP SDK and `uv`. It supports stdio for lo
 ## Setup and commands
 
 ```sh
-uv sync
-uv run pytest
-uv run ruff check .
+uv sync --locked
+uv run --locked pytest
+uv run --locked ruff check .
 ```
 
 Run locally over stdio:
 
 ```sh
-uv run springwinter-mcp
+uv run --locked springwinter-mcp
 ```
 
 Run for deployment over Streamable HTTP:
 
 ```sh
-uv run springwinter-mcp --transport streamable-http --host 0.0.0.0 --port 8000
+uv run --locked springwinter-mcp --transport streamable-http --host 0.0.0.0 --port 8000
 ```
 
 The HTTP endpoint is `/mcp`. Put TLS, authentication, authorization, rate limiting, and a trusted proxy in front of it before exposing it to customers. This bootstrap does not invent an auth model or public health endpoint.

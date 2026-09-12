@@ -1,2 +1,0 @@
-"""Spring Winter customer infrastructure."""
-

@@ -4,22 +4,21 @@
 
 This is the intended open-source repository for components customers can use:
 
-- CloudFormation resources.
-- A daemon.
 - An MCP server.
+- A daemon, planned for later.
 - A CLI, planned for later.
 
 The sibling `springwinter-app` repository is private and owns application business logic, frontend, and system documentation. Keep private application concerns out of this public repository. Documentation needed to use or contribute to core components belongs alongside those components.
 
 ## Current stage
 
-The user supplied the initial primer on 2026-09-09. MCP and customer-account Foundation infrastructure are implemented, but customer business capabilities, the daemon, the CLI, and the open-source license remain unresolved. Open-source intent does not establish a particular license.
+The user supplied the initial primer on 2026-09-09. The MCP bootstrap is implemented, but customer business capabilities, the daemon, the CLI, and the open-source license remain unresolved. Open-source intent does not establish a particular license.
 
 The MCP bootstrap is confirmed as Python managed by `uv` (2026-09-10). It lives in `mcp/`, uses the official MCP Python SDK, and supports stdio plus Streamable HTTP. It currently exposes only `ping`; customer tools and authentication remain undefined. Keep the MCP independently usable and do not import private application logic.
 
-The Foundation is public core infrastructure for one customer-owned AWS account and Region. CDK source lives in `infrastructure/cdk/`; contributors use Python 3.12/`uv` plus the repository-pinned CDK CLI. The private Rails control plane uses Active Job backed by Solid Queue for orchestration and assumes an externally protected customer role for AWS operations. Customer DynamoDB is authoritative for operation and resource lifecycle state.
+Confirmed on 2026-09-12: Core ships no customer-account Foundation, CDK, CloudFormation template, DynamoDB state, installer, or IAM role. Customers create and own one IAM role for Spring Winter access. Its trust policy names the exact control-plane principal and requires a unique external ID; customers choose its managed or inline permissions. See `docs/customer-role.md`.
 
-The Foundation currently provisions two retained DynamoDB tables, the cross-account control role, and separate Build, Deploy, and Data CloudFormation execution roles. It provisions no Step Functions, queues, Lambdas, logs, alarms, or workload resources. Capability execution roles intentionally have no workload permissions until their contracts and templates are approved. Resources use the configurable `sw-foundation` prefix and common tags.
+The private Rails control plane owns workflow and future resource state in its application database, assumes the customer-created role through STS, and will call AWS service APIs directly. Customer-account connection persistence, onboarding, AWS clients, and capability-specific permission contracts remain pending.
 
 ## Agent guidance
 
@@ -28,7 +27,6 @@ The Foundation currently provisions two retained DynamoDB tables, the cross-acco
 - Preserve customer usability and the public/private repository boundary when evaluating future changes.
 - Record component development commands and verification workflows when implementations exist. Repository workflow commands are documented below.
 - For MCP work, read `mcp/README.md` first. Design each customer capability before coding: use case, contract, authorization, side effects, idempotency, limits, errors, and acceptance tests. Keep `mcp/uv.lock` current with `uv lock`; use `uv sync --locked` and the Makefile's `mcp-*` commands for repeatable workflows.
-- For Foundation work, read `infrastructure/cdk/README.md`. Keep customer install artifacts versioned and checksummed, preserve stateful-resource retention, and do not add Build, ECS Deploy, SQL, or cache behavior until its capability contract is approved. Keep the Python project and local CDK CLI locked before release.
 
 ## Commits and releases
 
