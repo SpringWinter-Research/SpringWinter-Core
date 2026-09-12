@@ -1,0 +1,7 @@
+{
+  "app": "python -m springwinter_infrastructure.app",
+  "context": {
+    "aws-cdk:enable-path-metadata": false,
+    "aws-cdk:enable-version-reporting": false
+  }
+}

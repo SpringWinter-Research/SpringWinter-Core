@@ -1,0 +1,60 @@
+#!/usr/bin/env sh
+set -eu
+
+check_message() {
+  awk '
+    function reject(reason) {
+      print "Invalid commit message: " reason
+      failed = 1
+    }
+    NR == 1 {
+      if (length($0) > 72) reject("subject must be at most 72 characters")
+      if ($0 !~ /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9][a-z0-9._\/-]*\))?!: / &&
+          $0 !~ /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9][a-z0-9._\/-]*\))?: /)
+        reject("use type(scope): description, with optional scope and !")
+      description = $0
+      sub(/^[^:]*: /, "", description)
+      if (description !~ /[^[:space:]]/ || description ~ /^[[:space:]]/)
+        reject("description must start with a non-whitespace character")
+      if ($0 ~ /[[:space:]]$/) reject("subject must not end in whitespace")
+    }
+    NR == 2 && $0 !~ /^[[:space:]]*$/ {
+      reject("separate the subject and body with a blank line")
+    }
+    END {
+      if (NR == 0) reject("message is empty")
+      exit failed
+    }
+  ' "$1" >&2
+}
+
+if [ "$#" -eq 1 ] && [ -f "$1" ]; then
+  check_message "$1"
+elif [ "$#" -eq 2 ] && [ "$1" = "--range" ]; then
+  case "$2" in
+    -*) printf '%s\n' 'Commit range must not start with -.' >&2; exit 2 ;;
+    *..*) ;;
+    *) printf '%s\n' 'Use an explicit range such as BASE..HEAD.' >&2; exit 2 ;;
+  esac
+  temp_dir=$(mktemp -d)
+  trap 'rm -rf "$temp_dir"' EXIT
+  trap 'exit 130' INT
+  trap 'exit 143' TERM
+  git rev-list --reverse --no-merges "$2" -- > "$temp_dir/commits"
+  if [ ! -s "$temp_dir/commits" ]; then
+    printf '%s\n' 'No non-merge commits found in the requested range.' >&2
+    exit 1
+  fi
+  failed=0
+  while IFS= read -r commit; do
+    git show -s --format=%B "$commit" > "$temp_dir/message"
+    if ! check_message "$temp_dir/message"; then
+      printf 'Commit: %s\n' "$commit" >&2
+      failed=1
+    fi
+  done < "$temp_dir/commits"
+  exit "$failed"
+else
+  printf '%s\n' 'Usage: bin/commit-check MESSAGE_FILE | --range BASE..HEAD' >&2
+  exit 2
+fi

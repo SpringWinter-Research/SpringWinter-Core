@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -eu
+repo_root=$(git rev-parse --show-toplevel)
+exec "$repo_root/bin/commit-check" "$1"

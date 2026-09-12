@@ -1,0 +1,26 @@
+[project]
+name = "springwinter-mcp"
+version = "0.1.0"
+description = "Customer-facing Spring Winter MCP server"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = ["mcp[cli]>=1.26,<2"]
+
+[dependency-groups]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.24", "ruff>=0.9"]
+
+[project.scripts]
+springwinter-mcp = "springwinter_mcp.server:main"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.uv]
+package = true
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

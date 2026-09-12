@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+set -eu
+cd "$(dirname "$0")/.."
+repo_root=$(pwd -P)
+git_root=$(git rev-parse --show-toplevel 2>/dev/null) || {
+  printf '%s\n' 'Initialize or clone this repository before installing hooks.' >&2
+  exit 1
+}
+if [ "$repo_root" != "$git_root" ]; then
+  printf '%s\n' 'Refusing to configure hooks on a parent repository.' >&2
+  exit 1
+fi
+hooks_path=$(git config --get core.hooksPath || true)
+if [ -n "$hooks_path" ] && [ "$hooks_path" != ".githooks" ]; then
+  printf 'Existing core.hooksPath is %s; integrate the commit check there instead.\n' "$hooks_path" >&2
+  exit 1
+fi
+if [ -z "$hooks_path" ]; then
+  hooks_dir=$(git rev-parse --git-path hooks)
+  for existing_hook in "$hooks_dir"/*; do
+    case "$existing_hook" in *.sample) continue ;; esac
+    if [ -f "$existing_hook" ]; then
+      printf '%s\n' 'Existing Git hooks need integration before switching hooks paths.' >&2
+      exit 1
+    fi
+  done
+fi
+git config --local core.hooksPath .githooks
+printf '%s\n' 'Installed repository commit-message hook.'

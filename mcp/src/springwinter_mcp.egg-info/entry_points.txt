@@ -1,0 +1,2 @@
+[console_scripts]
+springwinter-mcp = springwinter_mcp.server:main
