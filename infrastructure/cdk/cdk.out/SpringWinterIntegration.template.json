@@ -1,0 +1,178 @@
+{
+ "Parameters": {
+  "OrchestratorRoleArn": {
+   "Type": "String",
+   "AllowedPattern": "^arn:aws:iam::\\d{12}:role/.+$",
+   "Description": "ARN of Spring Winter's orchestrator role — the ONLY principal allowed to assume this role."
+  },
+  "ExternalId": {
+   "Type": "String",
+   "Description": "Per-tenant secret supplied by Spring Winter.",
+   "MinLength": 16,
+   "NoEcho": true
+  },
+  "ManagedByTagValue": {
+   "Type": "String",
+   "Default": "spring-winter-managed",
+   "Description": "Resources tagged managed-by=<this value> are in scope."
+  }
+ },
+ "Resources": {
+  "IntegrationRole35EAE287": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Condition": {
+        "StringEquals": {
+         "sts:ExternalId": {
+          "Ref": "ExternalId"
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": {
+         "Ref": "OrchestratorRoleArn"
+        }
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "MaxSessionDuration": 3600,
+    "RoleName": "SpringWinter-Integration-Role"
+   }
+  },
+  "IntegrationRoleDefaultPolicy99182A66": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "cloudformation:CreateStack",
+        "cloudformation:UpdateStack",
+        "cloudformation:DeleteStack",
+        "cloudformation:DescribeStacks",
+        "cloudformation:DescribeStackEvents",
+        "cloudformation:DescribeStackResources",
+        "cloudformation:GetTemplate",
+        "cloudformation:ValidateTemplate"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:cloudformation:*:",
+          {
+           "Ref": "AWS::AccountId"
+          },
+          ":stack/spring-winter-*/*"
+         ]
+        ]
+       },
+       "Sid": "DriveOwnedStacks"
+      },
+      {
+       "Action": [
+        "ec2:StopInstances",
+        "ec2:StartInstances",
+        "ec2:TerminateInstances",
+        "ec2:ModifyInstanceAttribute",
+        "lambda:UpdateFunctionCode",
+        "lambda:UpdateFunctionConfiguration",
+        "lambda:DeleteFunction",
+        "s3:PutBucketPolicy",
+        "s3:DeleteBucket"
+       ],
+       "Condition": {
+        "StringEquals": {
+         "aws:ResourceTag/managed-by": {
+          "Ref": "ManagedByTagValue"
+         }
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*",
+       "Sid": "MutateTaggedResources"
+      },
+      {
+       "Action": [
+        "ec2:RunInstances",
+        "lambda:CreateFunction",
+        "s3:CreateBucket"
+       ],
+       "Condition": {
+        "StringEquals": {
+         "aws:RequestTag/managed-by": {
+          "Ref": "ManagedByTagValue"
+         }
+        },
+        "ForAllValues:StringEquals": {
+         "aws:TagKeys": [
+          "managed-by"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*",
+       "Sid": "CreateResourcesTagged"
+      },
+      {
+       "Action": [
+        "ec2:Describe*",
+        "s3:ListAllMyBuckets",
+        "s3:GetBucketLocation",
+        "lambda:List*",
+        "lambda:GetFunction",
+        "cloudwatch:GetMetricData",
+        "cloudwatch:ListMetrics"
+       ],
+       "Effect": "Allow",
+       "Resource": "*",
+       "Sid": "ReadOnlyDiscovery"
+      },
+      {
+       "Action": [
+        "ec2:CreateTags",
+        "ec2:DeleteTags"
+       ],
+       "Condition": {
+        "ForAllValues:StringEquals": {
+         "aws:TagKeys": [
+          "managed-by"
+         ]
+        }
+       },
+       "Effect": "Allow",
+       "Resource": "*",
+       "Sid": "ManageOwnTagOnly"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "IntegrationRoleDefaultPolicy99182A66",
+    "Roles": [
+     {
+      "Ref": "IntegrationRole35EAE287"
+     }
+    ]
+   }
+  }
+ },
+ "Outputs": {
+  "IntegrationRoleArn": {
+   "Description": "Send this ARN back to Spring Winter to finish onboarding.",
+   "Value": {
+    "Fn::GetAtt": [
+     "IntegrationRole35EAE287",
+     "Arn"
+    ]
+   }
+  }
+ }
+}

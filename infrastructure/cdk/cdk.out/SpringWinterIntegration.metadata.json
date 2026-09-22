@@ -1,0 +1,89 @@
+{
+  "/SpringWinterIntegration": [
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...jsii runtime, node internals...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/SpringWinterIntegration/OrchestratorRoleArn": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "OrchestratorRoleArn"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...jsii runtime, node internals...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/SpringWinterIntegration/ExternalId": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ExternalId"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...jsii runtime, node internals...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/SpringWinterIntegration/ManagedByTagValue": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "ManagedByTagValue"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...jsii runtime, node internals...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/SpringWinterIntegration/IntegrationRoleArn": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegrationRoleArn"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...jsii runtime, node internals...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/SpringWinterIntegration/IntegrationRole/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegrationRole35EAE287"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib, jsii runtime, node internals...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ],
+  "/SpringWinterIntegration/IntegrationRole/DefaultPolicy/Resource": [
+    {
+      "type": "aws:cdk:logicalId",
+      "data": "IntegrationRoleDefaultPolicy99182A66"
+    },
+    {
+      "type": "aws:cdk:creationStack",
+      "data": [
+        "...aws-cdk-lib, jsii runtime...",
+        "(no user code in 10 frames, use --stack-trace-limit to capture more)"
+      ]
+    }
+  ]
+}
