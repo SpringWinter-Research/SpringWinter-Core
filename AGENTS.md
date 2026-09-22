@@ -18,7 +18,7 @@ The MCP bootstrap is confirmed as Python managed by `uv` (2026-09-10). It lives 
 
 Confirmed on 2026-09-12: Core ships no customer-account Foundation, CDK, CloudFormation template, DynamoDB state, installer, or IAM role. Customers create and own one IAM role for Spring Winter access. Its trust policy names the exact control-plane principal and requires a unique external ID; customers choose its managed or inline permissions. See `docs/customer-role.md`.
 
-The private Rails control plane owns workflow and future resource state in its application database, assumes the customer-created role through STS, and will call AWS service APIs directly. Customer-account connection persistence, onboarding, AWS clients, and capability-specific permission contracts remain pending.
+The private Rails control plane owns workflow and future resource state in its application database, assumes the customer-created role through STS, and calls AWS service APIs directly for implemented capabilities. The web-server build-and-deploy permission contract is `docs/capabilities/web-server-build-and-deploy.md`. The worker build-and-deploy contract is `docs/capabilities/worker-build-and-deploy.md` (same compute path, no ELBv2 on Launch). The static-website build-and-deploy contract is `docs/capabilities/static-website-build-and-deploy.md` (S3, CloudFront, CodeBuild; no VPC/ALB/Fargate). Customer-account onboarding APIs and additional capability contracts remain pending.
 
 ## Agent guidance
 
