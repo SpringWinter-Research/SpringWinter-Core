@@ -118,6 +118,10 @@ Delete also includes the load-balancer and VPC teardown actions used when this c
 }
 ```
 
+## Cost
+
+`GET /api/projects/:project_id/redis/:id/cost` estimates storage from the latest `BytesUsedForCache` sample at the public US East (N. Virginia) rate of $0.084 per GB-hour. The minimum metered size is 100 MB. A missing or denied CloudWatch read uses that minimum and does not fail the page. ECPUs are listed at $0 with the rate $0.0023 per million; request volume is not forecast. The 1–8 GB storage maximum is not multiplied into the estimate. The response includes the same project Cost Explorer link used by web servers. This does not call Cost Explorer and does not add customer-role actions.
+
 ## Out of scope
 
 Memcached, Redis OSS, node-based clusters, MemoryDB, AUTH tokens, snapshots, and preview caches. SQL remains a separate unimplemented kind.

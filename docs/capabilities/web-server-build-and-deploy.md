@@ -132,10 +132,29 @@ Many of these APIs only allow `Resource: "*"`. Prefer that over inventing resour
           ]
         }
       }
+    },
+    {
+      "Sid": "PassEcsInfrastructureRole",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::*:role/sw-ecs-infra-*",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "ecs.amazonaws.com"
+        }
+      }
     }
   ]
 }
 ```
+
+## Connect
+
+Connect on a web server opens the ECS service tasks page in the customer account. The shell is ECS Exec (Session Manager) into a running copy, not an SSH port. The next deploy sets `enableExecuteCommand` and adds `ssmmessages:CreateControlChannel`, `CreateDataChannel`, `OpenControlChannel`, and `OpenDataChannel` to `sw-ecs-{resource_id}`. The customer role does not receive `ecs:ExecuteCommand`. The person signed in to the AWS console needs that action on their own user.
+
+## Optional data volume
+
+A web server can mount one gp3 volume. It is off unless `ebs_size_gib` (1–100) and `ebs_mount_path` are both set. ECS creates a new empty volume for each task and deletes it when that task stops. Copies do not share the disk. Spring Winter creates `sw-ecs-infra-{project_id}` trusted by `ecs.amazonaws.com` and passes that role only to ECS. The volume actions (`ec2:CreateVolume`, `DeleteVolume`, `AttachVolume`, `DetachVolume`, `DescribeVolumes`, `DescribeAvailabilityZones`, `CreateTags`, `DescribeTags`) live on that infrastructure role. The customer role does not receive them.
 
 ## Out of scope
 

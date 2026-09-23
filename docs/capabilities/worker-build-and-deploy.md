@@ -113,12 +113,31 @@ Many of these APIs only allow `Resource: "*"`. Prefer that over inventing resour
           ]
         }
       }
+    },
+    {
+      "Sid": "PassEcsInfrastructureRole",
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::*:role/sw-ecs-infra-*",
+      "Condition": {
+        "StringEquals": {
+          "iam:PassedToService": "ecs.amazonaws.com"
+        }
+      }
     }
   ]
 }
 ```
 
 Teardown of the last compute resource in a project may also call Elastic Load Balancing delete APIs if a web server previously created an ALB. Those actions remain on the published customer-connection stack; Worker Launch does not simulate them.
+
+## Connect
+
+Connect on a worker opens the ECS service tasks page in the customer account. The shell is ECS Exec (Session Manager) into a running copy, not an SSH port. The next deploy sets `enableExecuteCommand` and adds `ssmmessages:CreateControlChannel`, `CreateDataChannel`, `OpenControlChannel`, and `OpenDataChannel` to `sw-ecs-{resource_id}`. The customer role does not receive `ecs:ExecuteCommand`. The person signed in to the AWS console needs that action on their own user.
+
+## Optional data volume
+
+A worker can mount one gp3 volume. It is off unless `ebs_size_gib` (1–100) and `ebs_mount_path` are both set. ECS creates a new empty volume for each task and deletes it when that task stops. Copies do not share the disk. The project role `sw-ecs-infra-{project_id}` is shared with web servers and is passed only to `ecs.amazonaws.com`.
 
 ## Out of scope
 
