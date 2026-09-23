@@ -32,7 +32,7 @@ Replace the two symbolic values exactly. Do not use a wildcard principal. Issue 
 
 The customer attaches managed or inline policies to the role and controls their scope. Spring Winter does not automatically attach or require `AdministratorAccess`.
 
-Each Spring Winter capability publishes the AWS actions and resource constraints it needs before customers enable it. The web-server build-and-deploy contract is [capabilities/web-server-build-and-deploy.md](capabilities/web-server-build-and-deploy.md). The worker contract is [capabilities/worker-build-and-deploy.md](capabilities/worker-build-and-deploy.md). The static-website contract is [capabilities/static-website-build-and-deploy.md](capabilities/static-website-build-and-deploy.md). Missing permissions must fail as authorization errors; Spring Winter must not silently broaden the role.
+Each Spring Winter capability publishes the AWS actions and resource constraints it needs before customers enable it. The web-server build-and-deploy contract is [capabilities/web-server-build-and-deploy.md](capabilities/web-server-build-and-deploy.md). The worker contract is [capabilities/worker-build-and-deploy.md](capabilities/worker-build-and-deploy.md). The static-website contract is [capabilities/static-website-build-and-deploy.md](capabilities/static-website-build-and-deploy.md). The Valkey cache contract is [capabilities/valkey-cache.md](capabilities/valkey-cache.md). The Bedrock model-access contract is [capabilities/bedrock-model-access.md](capabilities/bedrock-model-access.md). Missing permissions must fail as authorization errors; Spring Winter must not silently broaden the role.
 
 ## Application contract
 

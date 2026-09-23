@@ -139,4 +139,4 @@ Many of these APIs only allow `Resource: "*"`. Prefer that over inventing resour
 
 ## Out of scope
 
-NAT gateways, TLS listeners, CloudFront, worker/SQL/Redis capabilities, and GitHub App credentials. CodeBuild clones `https://github.com/{repository}.git`; a GitHub token may be supplied only as a CodeBuild start-build override and is not stored on the customer role. `logs:GetLogEvents`, `logs:FilterLogEvents`, `logs:DescribeLogStreams`, and `cloudwatch:GetMetricData` are for the dashboard log and metric readers; Spring Winter does not simulate them before Launch or Redeploy.
+NAT gateways, TLS listeners, CloudFront, worker and SQL capabilities, and GitHub App credentials. Valkey cache and Bedrock model access are separate contracts. CodeBuild clones `https://github.com/{repository}.git`; a GitHub token may be supplied only as a CodeBuild start-build override and is not stored on the customer role. `logs:GetLogEvents`, `logs:FilterLogEvents`, `logs:DescribeLogStreams`, and `cloudwatch:GetMetricData` are for the dashboard log and metric readers; Spring Winter does not simulate them before Launch or Redeploy.
